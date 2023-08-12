@@ -33,7 +33,7 @@ header {
 
 .container {
   margin: auto;
-  width: 500px;
+  width: 480px;
   overflow: auto;
   padding: 3rem 2rem;
 }

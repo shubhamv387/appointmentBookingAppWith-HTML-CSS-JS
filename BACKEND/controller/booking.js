@@ -67,6 +67,7 @@ exports.postEditUser = (req, res, next) => {
     .then((user) => {
       console.log("user updated");
       res.json({
+        id: userId,
         name: updateName,
         email: updateEmail,
         phone: updatePhone,

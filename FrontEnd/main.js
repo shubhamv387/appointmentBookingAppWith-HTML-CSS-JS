@@ -81,7 +81,9 @@ function showUserOnScreen(userObj) {
   users.appendChild(user);
 
   //edit / update user details function.
-  editBtn.addEventListener("click", () => {
+  editBtn.addEventListener("click", editUser);
+
+  function editUser() {
     // changing the original display styles of both btns
     document.getElementById("submitbtn").style.display = "none";
     document.getElementById("updatebtn").style.display = "block";
@@ -110,17 +112,32 @@ function showUserOnScreen(userObj) {
         axios
           .put(`http://localhost:5000/edit-user/${userObj.id}`, newUserObj)
           .then((response) => {
-            axios
-              .get("http://localhost:5000/")
-              .then((response) => {
-                while (users.firstChild) {
-                  users.removeChild(users.firstChild);
-                }
-                for (let i = 0; i < response.data.length; i++) {
-                  showUserOnScreen(response.data[i]);
-                }
-              })
-              .catch((err) => console.log(err.message));
+            // console.log(response.data);
+            userObj = { ...response.data };
+            user.innerHTML =
+              "<div><span>Name: </span>" +
+              userObj.name +
+              "<br> <span>Email: </span>" +
+              userObj.email +
+              "<br> <span>Phone: </span>" +
+              userObj.phone +
+              "<br></div>";
+
+            let editBtn = document.createElement("button");
+            editBtn.className = "editBtn";
+            editBtn.appendChild(document.createTextNode("EDIT"));
+
+            user.appendChild(editBtn);
+
+            let delBtn = document.createElement("button");
+            delBtn.className = "delBtn";
+            delBtn.appendChild(document.createTextNode("DELETE"));
+
+            user.appendChild(delBtn);
+            users.appendChild(user);
+
+            editBtn.addEventListener("click", editUser);
+            delBtn.addEventListener("click", deleteUser);
 
             updateName.value = "";
             updateEmail.value = "";
@@ -143,17 +160,15 @@ function showUserOnScreen(userObj) {
                   newUserObj
                 )
                 .then((response) => {
-                  axios
-                    .get("http://localhost:5000/")
-                    .then((response) => {
-                      while (users.firstChild) {
-                        users.removeChild(users.firstChild);
-                      }
-                      for (let i = 0; i < response.data.length; i++) {
-                        showUserOnScreen(response.data[i]);
-                      }
-                    })
-                    .catch((err) => console.log(err.message));
+                  userObj = { ...response.data };
+                  user.firstElementChild.innerHTML =
+                    "<div><span>Name: </span>" +
+                    userObj.name +
+                    "<br> <span>Email: </span>" +
+                    userObj.email +
+                    "<br> <span>Phone: </span>" +
+                    userObj.phone +
+                    "<br></div>";
 
                   updateName.value = "";
                   updateEmail.value = "";
@@ -169,21 +184,21 @@ function showUserOnScreen(userObj) {
           .catch((err) => console.log(err));
       }
     };
-  });
-
+  }
   //remove user details from browser list and localStorage.
-  delBtn.addEventListener("click", () => {
+  delBtn.addEventListener("click", deleteUser);
+  function deleteUser() {
     const result = confirm("Are You Sure?");
     if (result) {
       axios
         .delete(`http://localhost:5000/delete-user/${userObj.id}`)
         .then((response) => {
-          users.remove(user);
-          console.log(response);
+          users.removeChild(user);
+          // console.log(response);
         })
         .catch((err) => console.log(err.message));
     }
-  });
+  }
 }
 
 // Show the user details previously saved
