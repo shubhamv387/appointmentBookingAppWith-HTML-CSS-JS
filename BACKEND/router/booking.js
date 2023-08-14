@@ -12,8 +12,8 @@ router.post("/add-user", bookingController.postAddUser);
 
 // router.post("/edit-user/:userId", bookingController.getEditUser);
 
-router.use("/edit-user/:userId", bookingController.postEditUser);
+router.put("/edit-user/:userId", bookingController.postEditUser);
 
-router.use("/delete-user/:userId", bookingController.deleteUser);
+router.delete("/delete-user/:userId", bookingController.deleteUser);
 
 module.exports = router;

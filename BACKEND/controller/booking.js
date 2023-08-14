@@ -78,9 +78,12 @@ exports.postEditUser = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
   const userId = req.params.userId;
-  User.destroy({ where: { id: userId } })
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => console.log(err.message));
+  User.findByPk(userId).then((user) => {
+    user
+      .destroy()
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => console.log(err.message));
+  });
 };
